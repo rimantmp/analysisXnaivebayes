@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Validasi Label{% endblock %}
+{% block content %}
+<p class="text-sm font-semibold text-indigo-600">TAHAP 03</p><h1 class="mt-2 text-3xl font-bold">Validasi Label</h1>
+<div class="mt-7 grid gap-4 sm:grid-cols-4">
+  <div class="rounded-3xl bg-indigo-600 p-5 text-white shadow-sm"><p class="text-sm text-indigo-100">Total valid</p><p class="mt-2 text-3xl font-bold">{{ total - invalid|length }}</p></div>
+  {% for label in labels_order %}<div class="md-card p-5"><p class="capitalize text-slate-500">{{ label }}</p><p class="mt-2 text-3xl font-bold">{{ counts.get(label, 0) }}</p><p class="text-xs text-slate-400">{{ "%.1f"|format(counts.get(label, 0) / total * 100) }}%</p></div>{% endfor %}
+</div>
+{% if invalid|length %}<div class="mt-6 rounded-3xl bg-red-100 p-5 text-red-800"><strong>{{ invalid|length }} label tidak valid.</strong> Gunakan hanya positif, netral, atau negatif.</div>{% else %}<div class="mt-6 flex items-center justify-between rounded-3xl bg-emerald-100 p-5 text-emerald-800"><span>Semua label valid dan siap diproses.</span><a href="{{ url_for('web.tfidf') }}" class="font-bold">Ekstraksi TF-IDF &rarr;</a></div>{% endif %}
+{% endblock %}

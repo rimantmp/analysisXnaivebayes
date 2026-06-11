@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Prediksi Teks{% endblock %}
+{% block content %}
+<p class="text-sm font-semibold text-indigo-600">PREDIKSI TEKS BARU</p><h1 class="mt-2 text-3xl font-bold">Uji Opini Masyarakat</h1><p class="mt-2 text-slate-500">Masukkan opini terkait pinjaman online untuk diprediksi oleh model.</p>
+<div class="mt-7 grid gap-6 lg:grid-cols-2">
+  <form method="post" class="md-card p-6"><label class="font-semibold">Teks opini</label><textarea name="text" rows="8" class="md-field mt-3 w-full p-4" placeholder="Contoh: Pinjaman online sangat membantu saat kebutuhan mendesak...">{{ text }}</textarea><button class="md-button mt-4 w-full py-3 font-semibold">Analisis Sentimen</button></form>
+  {% if prediction %}<div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-sm"><p class="text-sm text-indigo-200">Hasil prediksi</p><p class="mt-3 text-4xl font-bold capitalize">{{ prediction.label }}</p><p class="mt-5 text-xs uppercase tracking-wide text-indigo-200">Hasil preprocessing</p><p class="mt-2 rounded-2xl bg-indigo-700 p-3 text-sm">{{ prediction.processed }}</p><div class="mt-5 space-y-3">{% for label in labels_order %}<div><div class="flex justify-between text-sm capitalize"><span>{{ label }}</span><b>{{ "%.2f"|format(prediction.probabilities.get(label, 0) * 100) }}%</b></div><div class="mt-1 h-2 overflow-hidden rounded-full bg-indigo-800"><div class="h-full rounded-full bg-white" style="width:{{ prediction.probabilities.get(label, 0) * 100 }}%"></div></div></div>{% endfor %}</div></div>{% else %}<div class="md-card grid place-items-center border-dashed p-10 text-center text-slate-400">Hasil prediksi dan probabilitas akan muncul di sini.</div>{% endif %}
+</div>
+{% endblock %}

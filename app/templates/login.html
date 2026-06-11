@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Analisis Sentimen Pinjol</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #f6f6fb; }
+    .md-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 1.75rem;
+      background: white;
+      box-shadow: 0 8px 24px rgb(15 23 42 / 0.09);
+    }
+    .md-field {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 1rem;
+      background: white;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .md-field:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgb(79 70 229 / 0.12); }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800">
+  <main class="grid min-h-screen place-items-center p-5">
+    <div class="w-full max-w-md">
+      <div class="mb-7 text-center">
+        <div class="mx-auto grid h-16 w-16 place-items-center rounded-3xl bg-indigo-600 text-xl font-bold text-white shadow-md">SP</div>
+        <h1 class="mt-5 text-3xl font-bold text-slate-950">Selamat datang</h1>
+        <p class="mt-2 text-sm text-slate-500">Masuk ke sistem analisis sentimen pinjaman online.</p>
+      </div>
+
+      <div class="md-card p-7 sm:p-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="mb-5 rounded-2xl px-4 py-3 text-sm
+              {% if category == 'error' %}bg-red-100 text-red-800
+              {% else %}bg-emerald-100 text-emerald-800{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endwith %}
+
+        <form method="post">
+          <div>
+            <label for="username" class="text-sm font-semibold text-slate-700">Username</label>
+            <div class="relative mt-2">
+              <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21a7 7 0 0 0-14 0"/><circle cx="12" cy="7" r="4"/></svg>
+              <input id="username" name="username" type="text" autocomplete="username" required autofocus
+                     value="{{ request.form.get('username', '') }}"
+                     class="md-field py-3.5 pl-12 pr-4"
+                     placeholder="Masukkan username">
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <label for="password" class="text-sm font-semibold text-slate-700">Password</label>
+            <div class="relative mt-2">
+              <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="11" x="4" y="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              <input id="password" name="password" type="password" autocomplete="current-password" required
+                     class="md-field py-3.5 pl-12 pr-12"
+                     placeholder="Masukkan password">
+              <button id="toggle-password" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-2 text-slate-400 hover:bg-slate-100" aria-label="Tampilkan password">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="mt-7 w-full rounded-full bg-indigo-600 px-5 py-3.5 font-semibold text-white shadow-md transition hover:bg-indigo-700">
+            Masuk ke Aplikasi
+          </button>
+        </form>
+      </div>
+
+      <p class="mt-6 text-center text-xs text-slate-400">Sentiment Pinjol &middot; Multinomial Naive Bayes</p>
+    </div>
+  </main>
+  <script>
+    const password = document.getElementById('password');
+    document.getElementById('toggle-password').addEventListener('click', () => {
+      password.type = password.type === 'password' ? 'text' : 'password';
+    });
+  </script>
+</body>
+</html>

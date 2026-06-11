@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Preprocessing{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div><p class="text-sm font-semibold text-indigo-600">TAHAP 02</p><h1 class="mt-2 text-3xl font-bold">Preprocessing Teks</h1><p class="mt-2 text-slate-500">Cleaning, case folding, tokenisasi, stopword removal, dan stemming.</p></div>
+  <form method="post"><button class="md-button px-6 py-3 font-semibold">Jalankan Ulang</button></form>
+</div>
+<div class="mt-7 grid gap-4 sm:grid-cols-3">
+  <div class="rounded-3xl bg-indigo-600 p-5 text-white shadow-sm"><p class="text-sm text-indigo-100">Data valid</p><p class="mt-2 text-3xl font-bold">{{ data|length }}</p></div>
+  <div class="md-card p-5"><p class="text-sm text-slate-500">Dikecualikan</p><p class="mt-2 text-3xl font-bold">{{ excluded_count }}</p></div>
+  <a href="{{ url_for('web.labels') }}" class="grid place-items-center rounded-3xl bg-indigo-100 p-5 font-semibold text-indigo-800">Lanjut Validasi Label &rarr;</a>
+</div>
+<div class="md-card mt-6 overflow-hidden">
+  <div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-indigo-50 text-indigo-700"><tr><th class="p-4">Teks Asli</th><th class="p-4">Hasil Preprocessing</th><th class="p-4">Label</th></tr></thead><tbody class="divide-y">{% for row in data.head(12).itertuples() %}<tr><td class="max-w-xl p-4 text-slate-500">{{ row.text }}</td><td class="max-w-xl p-4 font-medium">{{ row.preprocessed }}</td><td class="p-4 capitalize">{{ row.label }}</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

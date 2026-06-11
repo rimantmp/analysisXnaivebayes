@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}TF-IDF{% endblock %}
+{% block content %}
+<div class="flex items-end justify-between gap-4"><div><p class="text-sm font-semibold text-indigo-600">TAHAP 04</p><h1 class="mt-2 text-3xl font-bold">Ekstraksi Fitur TF-IDF</h1></div><form method="post"><button class="md-button px-6 py-3 font-semibold">Hitung Ulang</button></form></div>
+<div class="mt-7 grid gap-6 lg:grid-cols-3">
+  <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-sm"><p class="text-indigo-100">Ukuran matriks</p><p class="mt-2 text-3xl font-bold">{{ shape[0] }} x {{ shape[1] }}</p><p class="mt-2 text-sm text-indigo-200">dokumen x fitur</p><a href="{{ url_for('web.classification') }}" class="mt-8 inline-block rounded-full bg-white px-5 py-2.5 font-semibold text-indigo-700">Latih model &rarr;</a></div>
+  <div class="md-card overflow-hidden lg:col-span-2"><div class="border-b p-5 font-bold">20 Istilah Teratas</div><div class="grid gap-x-8 p-5 sm:grid-cols-2">{% for term, score in top_terms %}<div class="flex justify-between border-b py-2 text-sm"><span>{{ loop.index }}. {{ term }}</span><span class="font-mono text-indigo-700">{{ score }}</span></div>{% endfor %}</div></div>
+</div>
+{% endblock %}

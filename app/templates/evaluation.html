@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Evaluasi{% endblock %}
+{% block content %}
+<p class="text-sm font-semibold text-indigo-600">TAHAP 06</p><h1 class="mt-2 text-3xl font-bold">Evaluasi Model</h1>
+<div class="mt-7 grid gap-4 sm:grid-cols-4">{% for key in ['accuracy','precision','recall','f1'] %}<div class="{% if key == 'accuracy' %}rounded-3xl bg-indigo-600 text-white shadow-sm{% else %}md-card{% endif %} p-5"><p class="text-sm uppercase tracking-wide opacity-60">{{ key }}</p><p class="mt-2 text-3xl font-bold">{{ "%.2f"|format(result[key] * 100) }}%</p></div>{% endfor %}</div>
+<div class="mt-6 grid gap-6 lg:grid-cols-2">
+  <div class="md-card p-6"><h2 class="font-bold">Confusion Matrix</h2><p class="mt-1 text-sm text-slate-500">Baris = aktual, kolom = prediksi</p><table class="mt-5 w-full overflow-hidden rounded-2xl text-center"><thead class="bg-indigo-50 text-indigo-700"><tr><th></th>{% for label in labels_order %}<th class="p-3 capitalize">{{ label }}</th>{% endfor %}</tr></thead><tbody>{% for row in result.matrix %}<tr><th class="p-3 text-left capitalize">{{ labels_order[loop.index0] }}</th>{% for value in row %}<td class="border border-slate-100 p-4 text-xl font-bold">{{ value }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+  <div class="md-card p-6"><h2 class="font-bold">Metrik Per Kelas</h2><div class="mt-5 space-y-4">{% for label in labels_order %}<div class="rounded-2xl bg-indigo-50 p-4"><p class="font-bold capitalize text-indigo-800">{{ label }}</p><div class="mt-2 grid grid-cols-3 text-sm"><span>Precision<br><b>{{ "%.2f"|format(result.report[label].precision * 100) }}%</b></span><span>Recall<br><b>{{ "%.2f"|format(result.report[label].recall * 100) }}%</b></span><span>F1<br><b>{{ "%.2f"|format(result.report[label]['f1-score'] * 100) }}%</b></span></div></div>{% endfor %}</div></div>
+</div>
+{% endblock %}

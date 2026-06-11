@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Import Dataset{% endblock %}
+{% block content %}
+<div class="mb-8">
+  <p class="text-sm font-semibold text-indigo-600">TAHAP 01</p>
+  <h1 class="mt-2 text-3xl font-bold text-slate-950">Import Dataset</h1>
+  <p class="mt-2 text-slate-500">Gunakan dataset bawaan atau unggah file Excel dengan kolom <code>text</code> dan <code>sentimen</code>.</p>
+</div>
+<div class="grid gap-6 xl:grid-cols-3">
+  <form method="post" enctype="multipart/form-data" class="md-card p-6">
+    <label class="text-sm font-semibold">File .xlsx</label>
+    <input type="file" name="dataset" accept=".xlsx" class="md-field mt-3 block w-full p-3 text-sm">
+    <button class="md-button mt-4 w-full px-4 py-3 font-semibold">Unggah Dataset</button>
+  </form>
+  <div class="grid grid-cols-2 gap-4 xl:col-span-2">
+    <div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-sm">
+      <p class="text-sm text-indigo-100">Total data</p>
+      <p class="mt-2 text-4xl font-bold">{{ "{:,}".format(data|length) if data is not none else 0 }}</p>
+    </div>
+    <div class="md-card p-6">
+      <p class="text-sm text-slate-500">Label tidak valid</p>
+      <p class="mt-2 text-4xl font-bold {% if invalid_count %}text-red-600{% else %}text-emerald-600{% endif %}">{{ invalid_count }}</p>
+    </div>
+    {% for label in labels_order %}
+      <div class="md-card p-5">
+        <p class="capitalize text-sm text-slate-500">{{ label }}</p>
+        <p class="mt-1 text-2xl font-bold">{{ counts.get(label, 0) }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% if data is not none %}
+<div class="md-card mt-6 overflow-hidden">
+  <div class="flex items-center justify-between border-b p-5">
+    <h2 class="font-bold">Pratinjau Data</h2>
+    <a href="{{ url_for('web.preprocessing') }}" class="md-button px-5 py-2.5 text-sm font-semibold">Lanjut Preprocessing</a>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-indigo-50 text-indigo-700"><tr><th class="p-4">No.</th><th class="p-4">Teks</th><th class="p-4">Sentimen</th></tr></thead>
+      <tbody class="divide-y">{% for row in data.head(8).itertuples() %}<tr><td class="p-4">{{ loop.index }}</td><td class="max-w-3xl p-4">{{ row.text }}</td><td class="p-4 font-semibold capitalize">{{ row.label }}</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

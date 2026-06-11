@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Status Database{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-end justify-between gap-4">
+  <div>
+    <p class="text-sm font-semibold text-indigo-600">PENYIMPANAN DATA</p>
+    <h1 class="mt-2 text-3xl font-bold text-slate-950">Database MySQL</h1>
+    <p class="mt-2 text-slate-500">Status koneksi dan ringkasan data permanen aplikasi.</p>
+  </div>
+  <span class="rounded-full px-4 py-2 text-sm font-bold {% if online %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
+    {% if online %}Terhubung{% else %}Tidak terhubung{% endif %}
+  </span>
+</div>
+
+<div class="mt-7 rounded-3xl {% if online %}bg-emerald-100{% else %}bg-red-100{% endif %} p-5">
+  <p class="font-bold {% if online %}text-emerald-900{% else %}text-red-900{% endif %}">
+    Database: {{ database_name }}
+  </p>
+  {% if online %}
+    <p class="mt-1 text-sm text-emerald-700">Dataset dan hasil pipeline disimpan secara otomatis.</p>
+  {% else %}
+    <p class="mt-1 text-sm text-red-700">{{ error or 'Server MySQL belum tersedia.' }}</p>
+  {% endif %}
+</div>
+
+{% if online %}
+<div class="mt-6 grid gap-4 sm:grid-cols-4">
+  {% for label, value in [
+    ('Dataset', stats.datasets),
+    ('Data Opini', stats.opinions),
+    ('Pelatihan', stats.trainings),
+    ('Prediksi', stats.predictions)
+  ] %}
+  <div class="md-card p-5">
+    <p class="text-sm text-slate-500">{{ label }}</p>
+    <p class="mt-2 text-3xl font-bold text-slate-950">{{ "{:,}".format(value) }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="md-card mt-6 overflow-hidden">
+  <div class="border-b border-slate-200 p-5"><h2 class="font-bold">Dataset Terbaru</h2></div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-indigo-50 text-indigo-700"><tr><th class="p-4">File</th><th class="p-4">Total</th><th class="p-4">Valid</th><th class="p-4">Status</th><th class="p-4">Waktu</th></tr></thead>
+      <tbody class="divide-y divide-slate-100">
+        {% for row in stats.recent %}
+        <tr><td class="p-4 font-medium">{{ row.filename }}</td><td class="p-4">{{ row.total_rows }}</td><td class="p-4">{{ row.valid_rows }}</td><td class="p-4 capitalize">{{ row.status }}</td><td class="p-4 text-slate-500">{{ row.created_at }}</td></tr>
+        {% else %}
+        <tr><td colspan="5" class="p-8 text-center text-slate-400">Belum ada dataset tersimpan.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

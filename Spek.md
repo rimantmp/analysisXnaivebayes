@@ -1,0 +1,2 @@
+Python dan Flask
+MySQL

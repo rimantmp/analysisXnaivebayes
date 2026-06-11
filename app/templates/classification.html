@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Klasifikasi{% endblock %}
+{% block flash_messages %}{% endblock %}
+{% block content %}
+<p class="text-sm font-semibold text-indigo-600">TAHAP 05</p><h1 class="mt-2 text-3xl font-bold">Klasifikasi Naive Bayes</h1><p class="mt-2 text-slate-500">Pembagian data dilakukan secara stratified dengan random seed 42.</p>
+<div class="mt-7 grid gap-6 lg:grid-cols-2">
+  <form method="post" class="md-card p-6">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="mb-5 flex items-start gap-3 rounded-2xl px-4 py-3 text-sm
+          {% if category == 'error' %}bg-red-100 text-red-800
+          {% elif category == 'warning' %}bg-amber-100 text-amber-800
+          {% else %}bg-emerald-100 text-emerald-800{% endif %}">
+          {% if category == 'success' %}
+            <svg class="mt-0.5 h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg>
+          {% endif %}
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    {% endwith %}
+    <label class="font-semibold">Proporsi data uji</label>
+    <select name="test_size" class="md-field mt-3 w-full p-3"><option value="0.2" {% if split.ratio == 0.2 %}selected{% endif %}>20%</option><option value="0.3" {% if split.ratio == 0.3 %}selected{% endif %}>30%</option></select>
+    <button class="md-button mt-4 w-full py-3 font-semibold">Latih Ulang Model</button>
+  </form>
+  <div class="grid grid-cols-2 gap-4"><div class="rounded-3xl bg-indigo-600 p-6 text-white shadow-sm"><p class="text-indigo-100">Data latih</p><p class="mt-2 text-4xl font-bold">{{ split.train }}</p></div><div class="md-card p-6"><p class="text-slate-500">Data uji</p><p class="mt-2 text-4xl font-bold">{{ split.test }}</p></div><a href="{{ url_for('web.evaluation') }}" class="col-span-2 rounded-3xl bg-indigo-100 p-5 text-center font-bold text-indigo-800">Lihat Evaluasi Model &rarr;</a></div>
+</div>
+{% endblock %}
